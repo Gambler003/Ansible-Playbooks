@@ -1,0 +1,10 @@
+---
+- name: create a file intestserver
+  hosts: slave
+  become: yes
+  tasks:
+    - name: create file
+      file:
+        path: /opt/slavefile.txt
+        state: touch
+        mode: 0700

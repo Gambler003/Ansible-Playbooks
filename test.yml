@@ -1,0 +1,10 @@
+---
+- name: this is first playbook to test
+  hosts: testserver
+  become: ec2-user
+  tasks:
+    - name:create file in remote server
+      file:
+	     path: /opt/helloworld.txt
+	     state: touch
+	     mode: 0700

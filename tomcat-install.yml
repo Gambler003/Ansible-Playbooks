@@ -1,0 +1,47 @@
+- name: Installing TOMCAT
+  hosts: all
+  become: yes
+  #remote_user: mahesh
+  vars:
+    group: tomcat
+    user: tomcat
+  tasks:
+  - name: create tomcat group
+    group: 
+      name: "{{group}}"
+      state: present
+  - name: create tomcat user
+    user:
+      name: "{{user}}"
+      group: "{{group}}"
+      create_home: yes
+      state: present
+      uid: 2000
+      shell: /bin/sh
+  - name: create directory to write tomcat logs
+    file:
+      path: /opt/tomcat_logs
+      state: directory
+      mode: 0644
+      owner: "{{group}}"
+      group: "{{group}}"
+#Pre-requisite to install tomcat is JAVA
+  - name: install JAVA
+    yum: 
+      name: java-1.8.0-openjdk
+      state: present
+  - name: Download apache tomcat from web
+    get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.65/bin/apache-tomcat-9.0.65.tar.gz
+      dest: /opt/apache-tomcat-9.0.65.tar.gz
+  - name: Un-archieve the downloaded tomcat
+    unarchive: 
+      src: /opt/apache-tomcat-9.0.65.tar.gz
+      dest: /opt/
+      creates: /opt/apache-tomcat-9.0.65
+      remote_src: yes
+  - name: Start TOMCAT
+    command: nohup /opt/apache-tomcat-9.0.65/bin/startup.sh
+  - name: wait for tomcat to start
+    wait_for:
+      port: 8080

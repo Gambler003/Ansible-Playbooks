@@ -1,0 +1,20 @@
+---
+- name: understand Variable
+  hosts: testserver
+  vars:
+    package: git #declaring var
+  tasks:
+    - name: install "{{package}}" app
+      yum:
+        name: "{{package}}" #calling variable
+        state: installed 
+---
+- name: check the file variable
+  hosts: testserver
+  vars_file:
+    - myvars.yml
+  tasks:
+    - name: install "{{package}}"
+      yum:
+        name: "{{package}}"
+        state: installed

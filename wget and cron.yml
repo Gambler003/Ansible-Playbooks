@@ -1,0 +1,13 @@
+---
+- name: Install wget in remote server
+  hosts: testserver
+  become: ec2-user
+  tasks:
+    - name: wget in test server
+      yum:
+        name: wget
+        state: installed
+    - name: restart cronjob service
+      service:
+        name: crond
+        state: restarted

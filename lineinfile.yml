@@ -1,0 +1,26 @@
+---
+- name: it's for line in file
+  hosts: testserver
+  tasks:
+    - name: this is to insert line in file
+      lineinfile:
+        dest: /opt/lineinfile.txt
+        line: inserting a line to a file and is to test it
+        state: present
+        create: yes
+
+---
+- name: Zero day vulnerability
+  hosts: slave
+  become: yes
+  tasks:
+    - name: fix heart bleed vulnerability
+      yum:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - openssl
+        - openssh-server
+        - openssh-client
+      when: 
+        ansible_facts['os_family'] == "Redhat"

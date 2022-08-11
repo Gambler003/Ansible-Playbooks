@@ -1,0 +1,10 @@
+---
+- name: Playbook to understand varibale
+  hosts: testserver
+  vars_files:  #to declare variable from outside of playbook
+    - myvar.yml
+  tasks:
+    - name: to install "{{package}}"
+      yum:
+        name: "{{package}}" #calling variable
+        state: installed
